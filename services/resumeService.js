@@ -1,63 +1,66 @@
-const fs = require('fs');
-const path = require('path');
-const Resume = require('../models/Resume');
-const JobDescription = require('../models/JobDescription'); // Assuming job details are stored
-const { analyzeResume, optimizeResumeForATS } = require('../utils/resumeAI');
+const axios = require("axios");
+const Resume = require("../models/Resume"); // Make sure Resume model exists
+require("dotenv").config();
 
-// 🔹 Save Resume to Database
-const saveResume = async (file, userId) => {
-  try {
-    const newResume = new Resume({
-      userId,
-      filePath: file.path,
-      fileName: file.originalname,
-    });
+const TOGETHER_AI_API_KEY = process.env.TOGETHER_AI_API_KEY;
+const TOGETHER_AI_ENDPOINT = "https://api.together.xyz/v1/chat/completions";
 
-    await newResume.save();
-    return newResume;
-  } catch (error) {
-    throw new Error('Failed to save resume.');
-  }
+/**
+ * Optimize resume based on job description using Llama
+ * @param {string} userId - The user ID
+ * @param {object} jobDetails - The job description
+ * @returns {object} Optimized resume
+ */
+const optimizeResumeForJob = async (userId, jobDetails) => {
+    try {
+        // Fetch user's existing resume from MongoDB
+        const resume = await Resume.findOne({ userId });
+        if (!resume) {
+            throw new Error("No resume found for optimization. Please upload a resume first.");
+        }
+
+        // Prepare prompt for Llama API
+        const prompt = `
+        You are an AI Resume Optimizer. Given a job description and a user's resume, improve the resume 
+        to match the job requirements. Keep formatting intact.
+
+        --- Job Description ---
+        ${jobDetails}
+
+        --- User's Resume ---
+        ${resume.content}
+
+        Provide an optimized resume.
+        `;
+
+        // Send request to Together.AI (Llama API)
+        const response = await axios.post(
+            TOGETHER_AI_ENDPOINT,
+            {
+                model: "meta-llama/Llama-3-8B", // Change this based on your preference
+                messages: [{ role: "user", content: prompt }],
+                temperature: 0.7,
+            },
+            {
+                headers: {
+                    "Authorization": `Bearer ${TOGETHER_AI_API_KEY}`,
+                    "Content-Type": "application/json",
+                },
+            }
+        );
+
+        // Extract optimized resume from response
+        const optimizedResume = response.data.choices[0].message.content;
+
+        // Save optimized resume back to MongoDB
+        resume.optimizedContent = optimizedResume;
+        await resume.save();
+
+        return { success: true, optimizedResume };
+    } catch (error) {
+        console.error("Resume Optimization Error:", error);
+        return { success: false, message: `Resume Generation Failed: ${error.message}` };
+    }
 };
 
-// 🔹 Optimize Resume Based on Job Description
-const optimizeResume = async (resumeId, jobId) => {
-  try {
-    const resume = await Resume.findById(resumeId);
-    if (!resume) throw new Error('Resume not found.');
-
-    const jobDetails = await JobDescription.findById(jobId);
-    if (!jobDetails) throw new Error('Job details not found.');
-
-    // Extract text from resume (Assuming a function extracts text from the uploaded file)
-    const resumeText = fs.readFileSync(resume.filePath, 'utf-8');
-
-    // Process optimization using AI
-    const optimizedText = await optimizeResumeForATS(resumeText, jobDetails.description);
-
-    resume.optimizedText = optimizedText;
-    await resume.save();
-
-    return resume;
-  } catch (error) {
-    throw new Error(`Error optimizing resume: ${error.message}`);
-  }
-};
-
-// 🔹 Fetch Optimized Resume
-const getOptimizedResume = async (resumeId) => {
-  try {
-    const resume = await Resume.findById(resumeId);
-    if (!resume) throw new Error('Optimized resume not found.');
-
-    return resume;
-  } catch (error) {
-    throw new Error('Failed to fetch optimized resume.');
-  }
-};
-
-module.exports = {
-  saveResume,
-  optimizeResume,
-  getOptimizedResume,
-};
+module.exports = { optimizeResumeForJob };

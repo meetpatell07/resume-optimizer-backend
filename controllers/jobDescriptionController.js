@@ -1,5 +1,5 @@
 // controllers/jobDescriptionController.js
-const JobDescription = require('../models/JobDescription');
+const JobDescription = require('../models/job');
 
 async function createJobDescription(req, res) {
   const { title, description, skillsRequired, responsibilities, opportunities } = req.body;
