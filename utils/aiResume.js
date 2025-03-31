@@ -4,6 +4,7 @@ const Education = require('../models/Education');
 const Skills = require('../models/Skills');
 const VolunteerWork = require('../models/VolunteerWork');
 const TechnicalKnowledge = require('../models/TechnicalKnowledge');
+const User = require('../models/User')
 const { generateAIContent, generateTailoredContent } = require('../services/aiService'); // AI integration
 
 // Function to aggregate all user data from multiple models
@@ -18,6 +19,8 @@ const aggregateUserData = async (userId) => {
     const skills = await Skills.find({ user: userId }).exec();
     const volunteerWork = await VolunteerWork.find({ user: userId }).exec();
     const technicalKnowledge = await TechnicalKnowledge.find({ user: userId }).exec();
+    const userInfo = await User.findById(userId).exec();
+
 
     // Combine all the data into a single object
     const userData = {
@@ -27,6 +30,7 @@ const aggregateUserData = async (userId) => {
       skills,
       volunteerWork,
       technicalKnowledge,
+      userInfo
     };
 
 
@@ -42,13 +46,7 @@ const generateTailoredResume = async (jobDescription, userId) => {
   try {
     // Step 1: Aggregate all relevant user data from multiple models
     const userData = await aggregateUserData(userId);
-    console.log('Aggregated User Data:', userData); // Debugging purposes
-
-
-    // Step 2: Match user data with the job description (you can improve this matching logic)
-    // const relevantExperience = matchDataWithJobDescription(userData, jobDescription);
-
-    // console.log('Matched Relevant Experience:', relevantExperience); // Log matched relevant experience
+    // console.log('Aggregated User Data:', userData); // Debugging purposes
 
     // Step 3: Generate the resume using AI with the matched data
     const resume = await generateTailoredContent(jobDescription, userData);

@@ -92,30 +92,67 @@ async function generateCoverLetter(jobDetails) {
  * @returns {Promise<string>} - Generated content from AI (e.g., resume, cover letter).
  */
 async function generateTailoredContent(jobDetails, userData) {
-  // Construct the prompt to generate the content
+  // Construct the optimized prompt
   const prompt = `
-    Create a tailored document (resume, cover letter, or summary) for the following job position. Consider the user's experience and match it to the job details provided.
+    You are an expert ATS-optimized resume writer with a deep understanding of industry best practices, keyword optimization, and job market trends. Your task is to generate a **highly tailored** and **ATS-compliant** resume that aligns **perfectly** with the provided job description. The final output must be **concise, impactful, and formatted to achieve an ATS score above 90**.
 
-    Job Title: ${jobDetails.jobTitle}
-    Company: ${jobDetails.companyName}
-    Responsibilities: ${jobDetails.responsibilities}
-    Skills Required: ${jobDetails.skillsRequired}
-    Qualifications: ${jobDetails.qualifications}
-    Opportunities: ${jobDetails.opportunities}
-    Other Details: ${jobDetails.otherDetails}
+    --- **Job Description Details** ---
+    **Job Title:** ${jobDetails.jobTitle}
+    **Company:** ${jobDetails.companyName}
+    **Key Responsibilities:** ${jobDetails.responsibilities}
+    **Skills Required:** ${jobDetails.skillsRequired}
+    **Qualifications:** ${jobDetails.qualifications}
+    **Opportunities & Career Growth:** ${jobDetails.opportunities}
+    **Additional Details:** ${jobDetails.otherDetails}
 
-    User Data: 
-    - Work Experience: ${JSON.stringify(userData.workExperience)}
-    - Projects: ${JSON.stringify(userData.projects)}
-    - Education: ${JSON.stringify(userData.education)}
-    - Skills: ${JSON.stringify(userData.skills)}
-    - Volunteer Work: ${JSON.stringify(userData.volunteerWork)}
-    - Technical Knowledge: ${JSON.stringify(userData.technicalKnowledge)}
+    --- **User Profile & Experience** ---
+    **Contact Information:** ${JSON.stringify(userData.userInfo)}
+    **Work Experience:** ${JSON.stringify(userData.workExperience)}
+    **Projects:** ${JSON.stringify(userData.projects)}
+    **Education:** ${JSON.stringify(userData.education)}
+    **Skills:** ${JSON.stringify(userData.skills)}
+    **Volunteer Work:** ${JSON.stringify(userData.volunteerWork)}
+    **Technical Knowledge:** ${JSON.stringify(userData.technicalKnowledge)}
 
-    Please ensure that the generated content is ATS-optimized and tailored for this specific role. Focus on the most relevant experience and skills.
+     --- **Instructions for Resume Generation** ---
+
+    🚀 **Step 1: Identify Relevant Experience**
+    - **Analyze the job description carefully** and extract key skills, required experience, and job responsibilities.
+    - **Scan the user's past experiences, projects, and skills** and filter out **ONLY** those that are **most relevant** to this job.
+    - **Ignore unrelated experiences** (e.g., security, retail, etc., if applying for a developer role).  
+    - Prioritize **relevant projects, work experience, and skills** that directly match the **job title**.
+
+    
+    🔥 **Step 2: Optimize Work Experience & Bullet Points**
+    - Rewrite each bullet point with **strong action verbs**, measurable achievements, and **quantifiable results**.
+    - Ensure the **most relevant experiences appear first** in the resume.
+    - Use **impact-driven phrasing** such as:
+      - ✅ "Developed and deployed a full-stack application using React.js and Node.js, improving process efficiency by 40%."
+      - ✅ "Implemented API optimizations that reduced server response time by 25%."
+      - ❌ (Avoid generic phrases like "Worked on a project" or "Familiar with JavaScript.")
+
+       🎯 **Step 3: Enhance Skills Section**
+    - Extract and **match skills exactly as they appear** in the job description.
+    - Prioritize **hard skills and technical proficiencies** over generic soft skills.
+    - List **certifications, tools, and frameworks** mentioned in the job post.
+
+    📄 **Step 4: Professional Formatting**
+    - Use a **clean, ATS-friendly layout** without tables, columns, or images.
+    - Ensure **consistent formatting** with clear headings.
+    - Maintain a **one-page or two-page format** (depending on experience).
+
+    ✅ **Final Deliverable:**  
+    - A **highly tailored resume** focusing only on relevant experience.  
+    - Optimized for **ATS scoring 90+** with proper **keyword targeting**.  
+    - Uses **quantifiable achievements and powerful action verbs**.  
+    - Easy to read, **professionally formatted, and recruiter-friendly**.  
+
+    **Goal:** Deliver a **flawless, ATS-optimized resume** that ensures the highest possible matching score while maintaining professionalism and readability.
+
+    Now, generate the **final optimized resume** based on these instructions.
   `;
 
-  // Pass the prompt to the generateAIContent method and return the result
+  // Pass the optimized prompt to AI for content generation
   return generateAIContent(prompt);
 }
 

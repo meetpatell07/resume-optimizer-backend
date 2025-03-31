@@ -2,7 +2,7 @@ const volunteerWorkService = require('../services/volunteerWorkService');
 
 exports.addVolunteerWork = async (req, res) => {
   try {
-    const volunteerWork = await volunteerWorkService.addVolunteerWork(req.userId, req.body);
+    const volunteerWork = await volunteerWorkService.addVolunteerWork(req.user.id, req.body);
     res.status(201).json(volunteerWork);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -11,7 +11,7 @@ exports.addVolunteerWork = async (req, res) => {
 
 exports.getVolunteerWorkByUserId = async (req, res) => {
   try {
-    const volunteerWorks = await volunteerWorkService.getVolunteerWorkByUserId(req.userId);
+    const volunteerWorks = await volunteerWorkService.getVolunteerWorkByUserId(req.user.id);
     res.status(200).json(volunteerWorks);
   } catch (error) {
     res.status(500).json({ message: error.message });

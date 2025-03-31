@@ -42,16 +42,18 @@ const generateJobContent = async (req, res) => {
 // Controller to generate resume based on job description
 const generateResumeAI = async (req, res) => {
     try {
-      const { jobDescription } = req.body;
+      const jobDescription = req.body;
       const userId = req.user.id; // Extracted from the token
       console.log(userId)
       if (!userId) {
         return res.status(400).json({ message: 'User ID is missing' });
       }
+
+      console.log("Req, body",jobDescription)
       
-  
       // Call the AI service to generate a tailored resume
       const resume = await generateTailoredResume(jobDescription, userId);
+
   
       // Return the generated resume to the user
       res.json({ resume });

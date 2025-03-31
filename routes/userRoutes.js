@@ -9,10 +9,10 @@ const { protect } = require('../middleware/authMiddleware'); // Assuming you hav
 router.post('/user/create', userController.createUser);
 
 // Get user by ID
-router.get('/user/:id', userController.getUserById);
+router.get('/user', protect, userController.getUserById);
 
 // Update user
-router.put('/user/:id', userController.updateUser);
+router.put('/user/:id', protect, userController.updateUser);
 
 // Get all users (optional)
 router.get('/users', userController.getAllUsers);

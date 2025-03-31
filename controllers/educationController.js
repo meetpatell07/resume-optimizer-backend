@@ -2,7 +2,9 @@ const educationService = require('../services/educationService');
 
 exports.addEducation = async (req, res) => {
   try {
-    const education = await educationService.addEducation(req.userId, req.body);
+
+
+    const education = await educationService.addEducation(req.user.id, req.body);
     res.status(201).json(education);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -11,7 +13,7 @@ exports.addEducation = async (req, res) => {
 
 exports.getEducationByUserId = async (req, res) => {
   try {
-    const educationData = await educationService.getEducationByUserId(req.userId);
+    const educationData = await educationService.getEducationByUserId(req.user.id);
     res.status(200).json(educationData);
   } catch (error) {
     res.status(500).json({ message: error.message });

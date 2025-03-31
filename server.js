@@ -12,6 +12,9 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
+app.use(cors({ origin: 'http://localhost:5001' }));  // Allow requests from the frontend
+
+
 // Import Routes
 const userRoutes = require('./routes/userRoutes');
 const jobRoutes = require('./routes/jobRoutes');
@@ -53,7 +56,7 @@ app.use('/api/v1/technical', technicalKnowledgeRoutes);
 app.use('/api/v1/education', educationRoutes);
 
 // Project Route
-app.use('/api/v1/projects', projectRoutes);
+app.use('/api/v1/project', projectRoutes);
 
 // Volunteering Route
 app.use('/api/v1/volunteer', volunteerWorkRoutes);

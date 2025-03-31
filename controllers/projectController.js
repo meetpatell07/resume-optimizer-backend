@@ -2,7 +2,7 @@ const projectService = require('../services/projectService');
 
 exports.addProject = async (req, res) => {
   try {
-    const newProject = await projectService.addProject(req.userId, req.body);
+    const newProject = await projectService.addProject(req.user.id, req.body);
     res.status(201).json(newProject);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -11,7 +11,7 @@ exports.addProject = async (req, res) => {
 
 exports.getProjectsByUserId = async (req, res) => {
   try {
-    const projects = await projectService.getProjectsByUserId(req.userId);
+    const projects = await projectService.getProjectsByUserId(req.user.id);
     res.status(200).json(projects);
   } catch (error) {
     res.status(500).json({ message: error.message });

@@ -2,7 +2,7 @@ const technicalKnowledgeService = require('../services/technicalKnowledgeService
 
 exports.addTechnicalKnowledge = async (req, res) => {
   try {
-    const newTechKnowledge = await technicalKnowledgeService.addTechnicalKnowledge(req.userId, req.body);
+    const newTechKnowledge = await technicalKnowledgeService.addTechnicalKnowledge(req.user.id, req.body);
     res.status(201).json(newTechKnowledge);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -11,7 +11,7 @@ exports.addTechnicalKnowledge = async (req, res) => {
 
 exports.getTechnicalKnowledgeByUserId = async (req, res) => {
   try {
-    const technicalKnowledge = await technicalKnowledgeService.getTechnicalKnowledgeByUserId(req.userId);
+    const technicalKnowledge = await technicalKnowledgeService.getTechnicalKnowledgeByUserId(req.user.id);
     res.status(200).json(technicalKnowledge);
   } catch (error) {
     res.status(500).json({ message: error.message });

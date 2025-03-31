@@ -2,7 +2,7 @@ const skillService = require('../services/skillService');
 
 exports.addSkill = async (req, res) => {
   try {
-    const newSkill = await skillService.addSkill(req.userId, req.body);
+    const newSkill = await skillService.addSkill(req.user.id, req.body);
     res.status(201).json(newSkill);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -11,7 +11,7 @@ exports.addSkill = async (req, res) => {
 
 exports.getSkillsByUserId = async (req, res) => {
   try {
-    const skills = await skillService.getSkillsByUserId(req.userId);
+    const skills = await skillService.getSkillsByUserId(req.user.id);
     res.status(200).json(skills);
   } catch (error) {
     res.status(500).json({ message: error.message });
