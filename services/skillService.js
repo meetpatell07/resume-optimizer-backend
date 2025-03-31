@@ -1,4 +1,4 @@
-const Skill = require('../models/Skill');
+const Skill = require('../models/Skills');
 
 exports.addSkill = async (userId, skillData) => {
   try {

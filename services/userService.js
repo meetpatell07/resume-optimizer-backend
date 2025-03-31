@@ -29,7 +29,8 @@ const getUserWithDetails = async (userId) => {
       .populate('workExperience')
       .populate('projects')
       .populate('skills')
-      .populate('volunteerWork');
+      .populate('volunteerWork')
+      .populate('technicalKnowledge')
     return user;
     };
 

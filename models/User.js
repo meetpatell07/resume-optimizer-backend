@@ -1,18 +1,34 @@
 const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
 
 const userSchema = new mongoose.Schema({
+
   fullName: { type: String, required: true },
-  contactInfo: { type: String },
-  email: { type: String, required: true, unique: true },
-  location: { type: String },
-  linkedIn: { type: String, required: false },
-  github: { type: String, required: false },
-  portfolio: { type: String, required: false },
-  password: {
-    type: String,
-    required: true,
-    minlength: [8, "Password must be at least 8 characters long"],
-},
+  contactInfo: {
+        phone: {
+            type: String,
+            required: true,
+        },
+        email: {
+            type: String,
+            required: true,
+        },
+        address: {
+            type: String,
+            required: true,
+        },
+    },  
+    email: { type: String, required: true, unique: true },
+    location: { type: String },
+    linkedIn: { type: String, required: false },
+    github: { type: String, required: false },
+    portfolio: { type: String, required: false },
+    password: {
+        type: String,
+        required: false,
+        minlength: [8, "Password must be at least 8 characters long"],
+    },
+
 });
 
 // Instance method to verify password

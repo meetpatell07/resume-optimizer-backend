@@ -1,5 +1,6 @@
 const Job = require('../models/job');
 const { generateResume, generateCoverLetter } = require('../services/aiService');
+const { generateTailoredResume } = require('../utils/aiResume')
 
 const generateJobContent = async (req, res) => {
   try {
@@ -38,4 +39,26 @@ const generateJobContent = async (req, res) => {
   }
 };
 
-module.exports = { generateJobContent };
+// Controller to generate resume based on job description
+const generateResumeAI = async (req, res) => {
+    try {
+      const { jobDescription } = req.body;
+      const userId = req.user.id; // Extracted from the token
+      console.log(userId)
+      if (!userId) {
+        return res.status(400).json({ message: 'User ID is missing' });
+      }
+      
+  
+      // Call the AI service to generate a tailored resume
+      const resume = await generateTailoredResume(jobDescription, userId);
+  
+      // Return the generated resume to the user
+      res.json({ resume });
+    } catch (error) {
+      console.error('Error generating resume:', error);
+      res.status(500).json({ error: 'Error generating resume' });
+    }
+};
+
+module.exports = { generateJobContent, generateResumeAI };

@@ -1,18 +1,18 @@
 const express = require('express');
 const skillController = require('../controllers/skillController');
 const router = express.Router();
-const { authMiddleware } = require('../middleware/authMiddleware'); // Assuming you have middleware to extract userId from JWT
+const { protect } = require('../middleware/authMiddleware'); // Assuming you have middleware to extract userId from JWT
 
 // Add skill
-router.post('/', authMiddleware, skillController.addSkill);
+router.post('/', protect, skillController.addSkill);
 
 // Get skills by user ID
-router.get('/', authMiddleware, skillController.getSkillsByUserId);
+router.get('/', protect, skillController.getSkillsByUserId);
 
 // Update skill by ID
-router.put('/:skillId', authMiddleware, skillController.updateSkill);
+router.put('/:skillId', protect, skillController.updateSkill);
 
 // Delete skill by ID
-router.delete('/:skillId', authMiddleware, skillController.deleteSkill);
+router.delete('/:skillId', protect, skillController.deleteSkill);
 
 module.exports = router;

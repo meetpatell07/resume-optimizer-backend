@@ -22,6 +22,7 @@ const projectRoutes = require('./routes/projectRoutes');
 const volunteerWorkRoutes = require('./routes/volunteerWorkRoutes')
 const workExperienceRoute = require('./routes/workExperienceRoutes')
 const skillRoute = require('./routes/skillRoutes')
+const authRoutes = require('./routes/auth')
 
 
 // MongoDB connection
@@ -37,10 +38,13 @@ mongoose.connect(process.env.MONGO_URI, {
 
 
 // Job routes
-app.use('/api/jobs', jobRoutes);
+app.use('/api/v1/jobs', jobRoutes);
 
 // User Route
-app.use('/api', userRoutes);
+app.use('/api/v1/', userRoutes);
+
+// Authentication and Authorization
+app.use("/api/v1", authRoutes); 
 
 // Technical Route
 app.use('/api/v1/technical', technicalKnowledgeRoutes);

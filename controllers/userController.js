@@ -50,8 +50,13 @@ const getAllUsers = async (req, res) => {
 };
 
 // Get work experience for a user
-const getWorkExperienceByUser = async (userId) => {
-    const workExperiences = await WorkExperience.find({ user: userId });
+const getWorkExperienceByUser = async (req, res) => {
+
+    const userId = req.user.id;
+    const workExperiences = await userService.getUserWithDetails(userId);
+
+    res.status(200).json({ success: true, workExperiences });
+
     return workExperiences;
 };
 

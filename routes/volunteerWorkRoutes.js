@@ -1,18 +1,18 @@
 const express = require('express');
 const volunteerWorkController = require('../controllers/volunteerWorkController');
 const router = express.Router();
-const { authMiddleware } = require('../middleware/authMiddleware'); // Assuming you have middleware to extract userId from JWT
+const { protect } = require('../middleware/authMiddleware'); // Assuming you have middleware to extract userId from JWT
 
 // Add volunteer work
-router.post('/', authMiddleware, volunteerWorkController.addVolunteerWork);
+router.post('/', protect, volunteerWorkController.addVolunteerWork);
 
 // Get volunteer work by user ID
-router.get('/', authMiddleware, volunteerWorkController.getVolunteerWorkByUserId);
+router.get('/', protect, volunteerWorkController.getVolunteerWorkByUserId);
 
 // Update volunteer work by ID
-router.put('/:volunteerId', authMiddleware, volunteerWorkController.updateVolunteerWork);
+router.put('/:volunteerId', protect, volunteerWorkController.updateVolunteerWork);
 
 // Delete volunteer work by ID
-router.delete('/:volunteerId', authMiddleware, volunteerWorkController.deleteVolunteerWork);
+router.delete('/:volunteerId', protect, volunteerWorkController.deleteVolunteerWork);
 
 module.exports = router;

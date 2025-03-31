@@ -85,4 +85,39 @@ async function generateCoverLetter(jobDetails) {
   return generateAIContent(prompt);
 }
 
-module.exports = { generateResume, generateCoverLetter };
+/**
+ * Generates a prompt for the AI based on the job description and user data, then calls generateAIContent.
+ * @param {Object} jobDetails - The job description and other details for the prompt.
+ * @param {Object} userData - The user's relevant data such as work experience, skills, etc.
+ * @returns {Promise<string>} - Generated content from AI (e.g., resume, cover letter).
+ */
+async function generateTailoredContent(jobDetails, userData) {
+  // Construct the prompt to generate the content
+  const prompt = `
+    Create a tailored document (resume, cover letter, or summary) for the following job position. Consider the user's experience and match it to the job details provided.
+
+    Job Title: ${jobDetails.jobTitle}
+    Company: ${jobDetails.companyName}
+    Responsibilities: ${jobDetails.responsibilities}
+    Skills Required: ${jobDetails.skillsRequired}
+    Qualifications: ${jobDetails.qualifications}
+    Opportunities: ${jobDetails.opportunities}
+    Other Details: ${jobDetails.otherDetails}
+
+    User Data: 
+    - Work Experience: ${JSON.stringify(userData.workExperience)}
+    - Projects: ${JSON.stringify(userData.projects)}
+    - Education: ${JSON.stringify(userData.education)}
+    - Skills: ${JSON.stringify(userData.skills)}
+    - Volunteer Work: ${JSON.stringify(userData.volunteerWork)}
+    - Technical Knowledge: ${JSON.stringify(userData.technicalKnowledge)}
+
+    Please ensure that the generated content is ATS-optimized and tailored for this specific role. Focus on the most relevant experience and skills.
+  `;
+
+  // Pass the prompt to the generateAIContent method and return the result
+  return generateAIContent(prompt);
+}
+
+
+module.exports = { generateAIContent, generateResume, generateCoverLetter, generateTailoredContent };

@@ -3,7 +3,11 @@ const workExperienceService = require('../services/workExperienceService');
 // Create work experience
 exports.addWorkExperience = async (req, res) => {
   try {
-    const workExperience = await workExperienceService.addWorkExperience(req.params.userId, req.body);
+    // Extract userId from req.user (set by verifyToken middleware)
+    const userId = req.user.id;
+
+    // Call service to add work experience with the userId
+    const workExperience = await workExperienceService.addWorkExperience(userId, req.body);
     res.status(201).json(workExperience);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -13,7 +17,11 @@ exports.addWorkExperience = async (req, res) => {
 // Get work experience by user ID
 exports.getWorkExperienceByUserId = async (req, res) => {
   try {
-    const workExperiences = await workExperienceService.getWorkExperienceByUserId(req.params.userId);
+    // Extract userId from req.user (set by verifyToken middleware)
+    const userId = req.user.id;
+
+    // Call service to get work experience by userId
+    const workExperiences = await workExperienceService.getWorkExperienceByUserId(userId);
     res.status(200).json(workExperiences);
   } catch (error) {
     res.status(500).json({ message: error.message });
