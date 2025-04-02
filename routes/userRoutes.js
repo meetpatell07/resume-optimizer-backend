@@ -12,7 +12,7 @@ router.post('/user/create', userController.createUser);
 router.get('/user', protect, userController.getUserById);
 
 // Update user
-router.put('/user/:id', protect, userController.updateUser);
+router.put('/update-user', protect, userController.updateUser);
 
 // Get all users (optional)
 router.get('/users', userController.getAllUsers);
