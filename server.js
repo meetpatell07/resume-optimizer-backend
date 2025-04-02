@@ -12,8 +12,15 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
-app.use(cors({ origin: 'http://localhost:5001' }));  // Allow requests from the frontend
+// app.use(cors({ origin: 'http://localhost:5001' }));  // Allow requests from the frontend
+// Allow requests from your frontend URL (replace with the actual URL)
+const corsOptions = {
+  origin: 'https://resume-optimizer-frontend.vercel.app',
+  methods: 'GET,POST,PUT,DELETE',
+  allowedHeaders: 'Content-Type,Authorization',
+};
 
+app.use(cors(corsOptions));
 
 // Import Routes
 const userRoutes = require('./routes/userRoutes');
