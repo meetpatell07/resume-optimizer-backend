@@ -15,9 +15,10 @@ app.use(express.json());
 // app.use(cors({ origin: 'http://localhost:5001' }));  // Allow requests from the frontend
 // Allow requests from your frontend URL (replace with the actual URL)
 const corsOptions = {
-  origin: 'https://resume-optimizer-frontend.vercel.app',
+  origin: ['https://resume-optimizer-frontend.vercel.app', 'http://localhost:5000'], // Add both domains
   methods: 'GET,POST,PUT,DELETE',
-  allowedHeaders: 'Content-Type,Authorization',
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true, // Important for authentication cookies/tokens
 };
 
 app.use(cors(corsOptions));
